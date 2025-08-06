@@ -249,12 +249,12 @@ on:
       builder_name:
         description: "Set Armbian builder signature."
         required: false
-        default: "Jirachi"
+        default: "JirachiZhang"
         type: choice
         options:
           - ophub
           - angel
-          - Jirachi
+          - JirachiZhang
 
 env:
   TZ: America/New_York
