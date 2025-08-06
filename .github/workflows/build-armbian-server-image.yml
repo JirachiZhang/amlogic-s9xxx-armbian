@@ -331,6 +331,8 @@ jobs:
                            BUILD_ONLY=default HOST=armbian BUILD_DESKTOP=no EXPERT=yes KERNEL_CONFIGURE=no \
                            COMPRESS_OUTPUTIMAGE="sha" SHARE_LOG=yes
           echo "status=success" >> ${GITHUB_OUTPUT}
+          ls -l /builder/build/output/build/ | grep linux
+          ls -l /builder/build/tmp_dir/tmp_build/rootfs/usr/lib/modules/
 
       - name: Organize files and clear space
         id: clean
