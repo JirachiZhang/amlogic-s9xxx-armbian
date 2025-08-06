@@ -179,6 +179,16 @@ on:
           - zcube1-max
           - zk-r39a
           - zysj
+      armbian_version:
+        description: 'Select armbian version'
+        default: 'main'
+        required: false
+        type: choice
+        options:
+          - main
+          - v25.02
+          - v24.11
+          - v24.08
       armbian_kernel:
         description: "Select kernel version."
         required: false
@@ -188,8 +198,8 @@ on:
           - 5.4.y
           - 5.10.y
           - 5.15.y
-          - 6.1.36
           - 6.1.y
+          - 6.1.36
           - 6.6.y
           - 6.12.y
           - 5.4.y_5.10.y
@@ -200,14 +210,15 @@ on:
       auto_kernel:
         description: "Auto use the latest kernel."
         required: false
-        default: true
+        default: false
         type: boolean
       kernel_repo:
         description: "Set the kernel repository."
         required: false
-        default: "ophub/kernel"
+        default: "Jirachi/kernel"
         type: choice
         options:
+          - Jirachi/kernel
           - ophub/kernel
       kernel_usage:
         description: "Set the tags of the stable kernel."
@@ -238,11 +249,12 @@ on:
       builder_name:
         description: "Set Armbian builder signature."
         required: false
-        default: "ophub"
+        default: "Jirachi"
         type: choice
         options:
           - ophub
           - angel
+          - Jirachi
 
 env:
   TZ: America/New_York
@@ -303,7 +315,7 @@ jobs:
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
           df -hT ${PWD}
-          git clone -q --single-branch --depth=1 --branch=main https://github.com/armbian/build.git build
+          git clone -q --single-branch --depth=1 --branch=${{ github.event.inputs.armbian_version }} https://github.com/armbian/build.git build
           ln -sf /builder/build ${GITHUB_WORKSPACE}/build
           ln -sf /builder/build /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/build
           echo "status=success" >> ${GITHUB_OUTPUT}
