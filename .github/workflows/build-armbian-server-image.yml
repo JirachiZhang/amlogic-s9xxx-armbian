@@ -215,10 +215,10 @@ on:
       kernel_repo:
         description: "Set the kernel repository."
         required: false
-        default: "Jirachi/kernel"
+        default: "JirachiZhang/kernel"
         type: choice
         options:
-          - Jirachi/kernel
+          - JirachiZhang/kernel
           - ophub/kernel
       kernel_usage:
         description: "Set the tags of the stable kernel."
@@ -315,7 +315,7 @@ jobs:
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
         run: |
           df -hT ${PWD}
-          git clone -q --single-branch --depth=1 --branch=${{ github.event.inputs.armbian_version }} https://github.com/armbian/build.git build
+          git clone -q --single-branch --depth=1 --branch=${{ inputs.armbian_version }} https://github.com/armbian/build.git build
           ln -sf /builder/build ${GITHUB_WORKSPACE}/build
           ln -sf /builder/build /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/build
           echo "status=success" >> ${GITHUB_OUTPUT}
