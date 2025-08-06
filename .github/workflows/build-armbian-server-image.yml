@@ -317,7 +317,7 @@ jobs:
           df -hT ${PWD}
           git clone -q --single-branch --depth=1 --branch=${{ inputs.armbian_version }} https://github.com/armbian/build.git build
           ln -sf /builder/build ${GITHUB_WORKSPACE}/build
-          ln -sf /builder/build /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/build
+          ln -sf /builder/build /home/runner/work/_actions/JirachiZhang/amlogic-s9xxx-armbian/main/build
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Compile Armbian [ ${{ inputs.set_release }} ]
@@ -331,7 +331,6 @@ jobs:
                            BUILD_ONLY=default HOST=armbian BUILD_DESKTOP=no EXPERT=yes KERNEL_CONFIGURE=no \
                            COMPRESS_OUTPUTIMAGE="sha" SHARE_LOG=yes
           echo "status=success" >> ${GITHUB_OUTPUT}
-          ls -l /builder/build/tmp_dir/tmp_build/rootfs/usr/lib/modules/
 
       - name: Organize files and clear space
         id: clean
