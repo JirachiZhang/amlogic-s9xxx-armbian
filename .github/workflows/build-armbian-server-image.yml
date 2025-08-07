@@ -320,34 +320,34 @@ jobs:
           ln -sf /builder/build /home/runner/work/_actions/JirachiZhang/amlogic-s9xxx-armbian/main/build
           echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Compile Armbian [ ${{ inputs.set_release }} ]
-        id: compile
-        working-directory: /builder
-        if: ${{ steps.down.outputs.status }} == 'success' && !cancelled()
-        run: |
-          # Compile method and parameter description: https://docs.armbian.com/Developer-Guide_Build-Options
-          cd build/
-              ./compile.sh RELEASE=${{ inputs.set_release }} BOARD=odroidn2 BRANCH=current BUILD_MINIMAL=no \
-                           BUILD_ONLY=default HOST=armbian BUILD_DESKTOP=no EXPERT=yes KERNEL_CONFIGURE=no \
-                           COMPRESS_OUTPUTIMAGE="sha" SHARE_LOG=yes
-          echo "status=success" >> ${GITHUB_OUTPUT}
+      # - name: Compile Armbian [ ${{ inputs.set_release }} ]
+      #   id: compile
+      #   working-directory: /builder
+      #   if: ${{ steps.down.outputs.status }} == 'success' && !cancelled()
+      #   run: |
+      #     # Compile method and parameter description: https://docs.armbian.com/Developer-Guide_Build-Options
+      #     cd build/
+      #         ./compile.sh RELEASE=${{ inputs.set_release }} BOARD=odroidn2 BRANCH=current BUILD_MINIMAL=no \
+      #                      BUILD_ONLY=default HOST=armbian BUILD_DESKTOP=no EXPERT=yes KERNEL_CONFIGURE=no \
+      #                      COMPRESS_OUTPUTIMAGE="sha" SHARE_LOG=yes
+      #     echo "status=success" >> ${GITHUB_OUTPUT}
 
-      - name: Organize files and clear space
-        id: clean
-        if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
-        run: |
-          # Organize and keep essential files, delete unnecessary files
-          chmod +x ${ROOTFS_SCRIPT}
-          ${ROOTFS_SCRIPT} -v ${{ inputs.set_release }} -s true -c true -k true
+      # - name: Organize files and clear space
+      #   id: clean
+      #   if: ${{ steps.compile.outputs.status }} == 'success' && !cancelled()
+      #   run: |
+      #     # Organize and keep essential files, delete unnecessary files
+      #     chmod +x ${ROOTFS_SCRIPT}
+      #     ${ROOTFS_SCRIPT} -v ${{ inputs.set_release }} -s true -c true -k true
 
-          # Output cleaning result information
-          df -hT ${PWD}
-          echo "build_tag=Armbian_${{ inputs.set_release }}_${{ inputs.armbian_storage }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
-          echo "status=success" >> ${GITHUB_OUTPUT}
+      #     # Output cleaning result information
+      #     df -hT ${PWD}
+      #     echo "build_tag=Armbian_${{ inputs.set_release }}_${{ inputs.armbian_storage }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
+      #     echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Upload Armbian image to Release
         uses: ncipollo/release-action@main
-        if: ${{ steps.clean.outputs.status }} == 'success' && !cancelled()
+        if: ${{ steps.down.outputs.status }} == 'success' && !cancelled()
         with:
           tag: ${{ steps.clean.outputs.build_tag }}
           artifacts: build/output/images/*
