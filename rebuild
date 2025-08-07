@@ -1206,7 +1206,7 @@ loop_rebuild() {
                     # Execute the following functions in sequence
                     extract_armbian
                     make_image
-                    # copy_files
+                    copy_files
                     replace_kernel
                     refactor_bootfs
                     refactor_rootfs
