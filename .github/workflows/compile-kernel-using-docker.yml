@@ -21,12 +21,13 @@ on:
       kernel_version:
         description: "Select kernel version"
         required: false
-        default: "6.12.y"
+        default: "6.1.36"
         type: choice
         options:
           - 5.10.y
           - 5.15.y
           - 6.1.y
+          - 6.1.36
           - 6.6.y
           - 6.12.y
           - 5.10.y_5.15.y
@@ -88,11 +89,11 @@ on:
       kernel_sign:
         description: "Set the kernel custom signature"
         required: false
-        default: "-ophub"
+        default: "-JirachiZhang"
         type: choice
         options:
           - -ophub
-          - -yourname
+          - -JirachiZhang
 
 env:
   TZ: America/New_York
@@ -166,20 +167,20 @@ jobs:
         run: |
           # Create a docker mapping directory
           mkdir -p /builder/compile-kernel/{kernel,output}
-          ln -sf /builder/compile-kernel/kernel /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/compile-kernel/kernel
-          ln -sf /builder/compile-kernel/output /home/runner/work/_actions/ophub/amlogic-s9xxx-armbian/main/compile-kernel/output
+          ln -sf /builder/compile-kernel/kernel /home/runner/work/_actions/JirachiZhang/amlogic-s9xxx-armbian/main/compile-kernel/kernel
+          ln -sf /builder/compile-kernel/output /home/runner/work/_actions/JirachiZhang/amlogic-s9xxx-armbian/main/compile-kernel/output
 
           # Pull the Armbian Docker image
           docker run -d --privileged \
-              --name armbian-ophub \
+              --name armbian-JirachiZhang \
               -v /builder/compile-kernel:/opt/kernel/compile-kernel \
               --restart=always \
-              ophub/armbian-${{ inputs.docker_image }}:latest
+              JirachiZhang/armbian-${{ inputs.docker_image }}:latest
 
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Compile the kernel [ ${{ inputs.kernel_version }} ]
-        uses: ophub/amlogic-s9xxx-armbian@main
+        uses: JirachiZhang/amlogic-s9xxx-armbian@main
         if: ${{ steps.pull.outputs.status }} == 'success' && !cancelled()
         with:
           build_target: kernel
